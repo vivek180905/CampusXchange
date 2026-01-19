@@ -8,6 +8,7 @@ import CreatePage from "./pages/CreatePage";
 import EditProductPage from "./pages/EditProductPage";
 import useAuthReq from "./hooks/useAuthReq";
 import useUserSync from "./hooks/useUserSync";
+import Footer from "./components/Footer";
 
 function App() {
   const { isClerkLoaded, isSignedIn } = useAuthReq();
@@ -17,9 +18,9 @@ function App() {
 
   return (
    
-    <div className="min-h-screen bg-base-100">
+    <div className="min-h-screen bg-base-100 flex flex-col">
       <Navbar />
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="max-w-5xl mx-auto px-4 py-8 grow w-full">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/product/:id" element={<ProductPage />} />
@@ -31,6 +32,7 @@ function App() {
           />
         </Routes>
       </main>
+      <Footer/>
     </div>
   );
 }

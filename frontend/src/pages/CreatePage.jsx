@@ -3,7 +3,9 @@ import { useCreateProduct } from "../hooks/useProducts";
 import { useState } from "react";
 import { ArrowLeftIcon, FileTextIcon, ImageIcon, SparklesIcon, TypeIcon } from "lucide-react";
 
+
 function CreatePage() {
+
   const navigate = useNavigate();
   const createProduct = useCreateProduct();
   const [formData, setFormData] = useState({ title: "", description: "", imageUrl: "" });
@@ -29,6 +31,7 @@ function CreatePage() {
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+            
             {/* TITLE INPUT */}
             <label className="input input-bordered flex items-center gap-2 bg-base-200">
               <TypeIcon className="size-4 text-base-content/50" />
@@ -71,7 +74,7 @@ function CreatePage() {
               <div className="flex items-start gap-2 p-3 rounded-box bg-base-200 border border-base-300">
                 <FileTextIcon className="size-4 text-base-content/50 mt-1" />
                 <textarea
-                  placeholder="Description"
+                  placeholder="Description (Along with contact details & price)"
                   className="grow bg-transparent resize-none focus:outline-none min-h-24"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -85,7 +88,8 @@ function CreatePage() {
                 <span>Failed to create. Try again.</span>
               </div>
             )}
-
+            
+            
             <button
               type="submit"
               className="btn btn-primary w-full"
@@ -97,6 +101,7 @@ function CreatePage() {
                 "Create Product"
               )}
             </button>
+            
           </form>
         </div>
       </div>

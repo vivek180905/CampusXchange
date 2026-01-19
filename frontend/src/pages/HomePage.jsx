@@ -4,8 +4,11 @@ import { Link } from "react-router";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ProductCard from "../components/ProductCard";
 import { SignInButton } from "@clerk/clerk-react";
+import useAuthReq from "../hooks/useAuthReq";
 
 function HomePage() {
+  const { isSignedIn } = useAuthReq();
+
   const { data: products, isLoading, error } = useProducts();
 
   if (isLoading) return <LoadingSpinner />;
@@ -38,12 +41,18 @@ function HomePage() {
             <p className="py-4 text-base-content/60">
               Upload, discover, and connect with creators.
             </p>
-            <SignInButton mode="modal">
-              <button className="btn btn-primary">
-                <SparklesIcon className="size-4" />
-                Start Selling
-              </button>
-            </SignInButton>
+            {isSignedIn ? (
+              <Link to="/create" className="btn btn-primary">
+                <SparklesIcon className="size-4" /> Start Selling
+              </Link>
+            ) : (
+              <SignInButton mode="modal">
+                <button className="btn btn-primary">
+                  <SparklesIcon className="size-4" />
+                  Start Selling
+                </button>
+              </SignInButton>
+            )}
           </div>
         </div>
       </div>

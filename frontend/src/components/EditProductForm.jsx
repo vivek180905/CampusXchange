@@ -70,8 +70,8 @@ function EditProductForm({ product, isPending, isError, onSubmit }) {
               <div className="flex items-start gap-2 p-3 rounded-box bg-base-200 border border-base-300">
                 <FileTextIcon className="size-4 text-base-content/50 mt-1" />
                 <textarea
-                  placeholder="Description"
-                  aria-label="Description"
+                  placeholder="Description (Along with contact details & price)"
+                  aria-label="Description (Along with contact details & price)"
                   className="grow bg-transparent resize-none focus:outline-none min-h-24"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
