@@ -34,6 +34,7 @@ function EditProductForm({ product, isPending, isError, onSubmit }) {
               <input
                 type="text"
                 placeholder="Product title"
+                aria-label="Product title"
                 className="grow"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -46,6 +47,7 @@ function EditProductForm({ product, isPending, isError, onSubmit }) {
               <input
                 type="url"
                 placeholder="Image URL"
+                aria-label="Image URL"
                 className="grow"
                 value={formData.imageUrl}
                 onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
@@ -69,6 +71,7 @@ function EditProductForm({ product, isPending, isError, onSubmit }) {
                 <FileTextIcon className="size-4 text-base-content/50 mt-1" />
                 <textarea
                   placeholder="Description"
+                  aria-label="Description"
                   className="grow bg-transparent resize-none focus:outline-none min-h-24"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
