@@ -18,7 +18,8 @@
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.7",
     "express": "^5.2.1",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "productify": "file:.."
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
