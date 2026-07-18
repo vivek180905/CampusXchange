@@ -1,6 +1,5 @@
 <h1 align="center">✨ Full-Stack Product Store ✨</h1>
 
-![Demo App](/frontend/public/screenshot-for-readme.png)
 
 ✨ Highlights
 
@@ -14,9 +13,7 @@
 - ⚡ Data Fetching & Caching using TanStack Query
 - 🔄 End-to-End API ↔ Frontend Integration
 - 🧠 Clean Project Structure & Best Practices
-- 🧪 Hands-on Learning by Building (not just theory)
 - 🚀 Production Deployment with Live URL
-- 📎 Resume-Ready Project
 - 💸 100% Free Tools & Setup
 - 📂 Free & Open-Source Code
 
