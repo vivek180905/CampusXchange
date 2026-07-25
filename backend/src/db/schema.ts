@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 export const users = pgTable("users", {
@@ -19,6 +19,8 @@ export const products = pgTable("products", {
   title: text("title").notNull(),
   description: text("description").notNull(),
   imageUrl: text("image_url").notNull(),
+  price: integer("price"),
+  isSold: boolean("is_sold").default(false).notNull(),
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),

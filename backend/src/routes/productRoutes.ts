@@ -22,4 +22,7 @@ router.put("/:id", requireAuth(), productController.updateProduct);
 // DELETE /api/products/:id - Delete product (protected - owner only)
 router.delete("/:id", requireAuth(), productController.deleteProduct);
 
+// PATCH /api/products/:id/sold - Toggle sold status (protected - owner only)
+router.patch("/:id/sold", requireAuth(), productController.toggleSold);
+
 export default router;

@@ -6,7 +6,8 @@
     "dev": "nodemon",
     "build": "tsc",
     "start": "node dist/index.js",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "seed": "ts-node src/db/seed.ts"
   },
   "keywords": [],
   "author": "",

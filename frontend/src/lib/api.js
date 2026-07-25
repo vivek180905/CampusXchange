@@ -37,6 +37,11 @@ export const deleteProduct = async (id) => {
   return data;
 };
 
+export const toggleSoldStatus = async (id) => {
+  const { data } = await api.patch(`/products/${id}/sold`);
+  return data;
+};
+
 // Comments API
 export const createComment = async ({ productId, content }) => {
   const { data } = await api.post(`/comments/${productId}`, { content });

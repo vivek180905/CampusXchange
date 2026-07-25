@@ -1,14 +1,14 @@
 import { Link, useNavigate } from "react-router";
 import { useCreateProduct } from "../hooks/useProducts";
 import { useState } from "react";
-import { ArrowLeftIcon, FileTextIcon, ImageIcon, SparklesIcon, TypeIcon } from "lucide-react";
+import { ArrowLeftIcon, FileTextIcon, ImageIcon, SparklesIcon, TypeIcon, IndianRupeeIcon } from "lucide-react";
 
 
 function CreatePage() {
 
   const navigate = useNavigate();
   const createProduct = useCreateProduct();
-  const [formData, setFormData] = useState({ title: "", description: "", imageUrl: "" });
+  const [formData, setFormData] = useState({ title: "", description: "", imageUrl: "", price: "" });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,6 +42,19 @@ function CreatePage() {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required
+              />
+            </label>
+
+            {/* PRICE INPUT */}
+            <label className="input input-bordered flex items-center gap-2 bg-base-200">
+              <IndianRupeeIcon className="size-4 text-base-content/50" />
+              <input
+                type="number"
+                placeholder="Price (optional)"
+                className="grow"
+                min="0"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
               />
             </label>
 

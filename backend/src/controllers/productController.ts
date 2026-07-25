@@ -49,7 +49,7 @@ export const createProduct = async (req: Request, res: Response) => {
     const { userId } = getAuth(req);
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-    const { title, description, imageUrl } = req.body;
+    const { title, description, imageUrl, price } = req.body;
 
     if (!title || !description || !imageUrl) {
       res.status(400).json({ error: "Title, description, and imageUrl are required" });
@@ -60,6 +60,7 @@ export const createProduct = async (req: Request, res: Response) => {
       title,
       description,
       imageUrl,
+      price: price ? parseInt(price) : null,
       userId,
     });
 
@@ -77,7 +78,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
     const { id } = req.params;
-    const { title, description, imageUrl } = req.body;
+    const { title, description, imageUrl, price } = req.body;
 
     // Check if product exists and belongs to user
     const existingProduct = await queries.getProductById(id);
@@ -95,6 +96,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       title,
       description,
       imageUrl,
+      price: price !== undefined ? (price ? parseInt(price) : null) : undefined,
     });
 
     res.status(200).json(product);
@@ -129,5 +131,35 @@ export const deleteProduct = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error deleting product:", error);
     res.status(500).json({ error: "Failed to delete product" });
+  }
+};
+
+// Toggle sold status (protected - owner only)
+export const toggleSold = async (req: Request, res: Response) => {
+  try {
+    const { userId } = getAuth(req);
+    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+    const { id } = req.params;
+
+    const existingProduct = await queries.getProductById(id);
+    if (!existingProduct) {
+      res.status(404).json({ error: "Product not found" });
+      return;
+    }
+
+    if (existingProduct.userId !== userId) {
+      res.status(403).json({ error: "You can only update your own products" });
+      return;
+    }
+
+    const product = await queries.updateProduct(id, {
+      isSold: !existingProduct.isSold,
+    });
+
+    res.status(200).json(product);
+  } catch (error) {
+    console.error("Error toggling sold status:", error);
+    res.status(500).json({ error: "Failed to toggle sold status" });
   }
 };

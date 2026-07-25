@@ -1,6 +1,7 @@
 import { useProducts } from "../hooks/useProducts";
-import { PackageIcon, SparklesIcon } from "lucide-react";
+import { PackageIcon, SparklesIcon, SearchIcon, XIcon } from "lucide-react";
 import { Link } from "react-router";
+import { useState } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ProductCard from "../components/ProductCard";
 import { SignInButton } from "@clerk/clerk-react";
@@ -8,8 +9,8 @@ import useAuthReq from "../hooks/useAuthReq";
 
 function HomePage() {
   const { isSignedIn } = useAuthReq();
-
   const { data: products, isLoading, error } = useProducts();
+  const [searchQuery, setSearchQuery] = useState("");
 
   if (isLoading) return <LoadingSpinner />;
 
@@ -20,6 +21,16 @@ function HomePage() {
       </div>
     );
   }
+
+  // Filter products based on search query
+  const filteredProducts = products.filter((product) => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      product.title.toLowerCase().includes(query) ||
+      product.description.toLowerCase().includes(query)
+    );
+  });
 
   return (
     <div className="space-y-10">
@@ -59,25 +70,62 @@ function HomePage() {
 
       {/* PRODUCTS */}
       <div>
-        <h2 className="text-xl font-bold flex items-center gap-2 mb-4">
-          <PackageIcon className="size-5 text-primary" />
-          All Products
-        </h2>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            <PackageIcon className="size-5 text-primary" />
+            All Products
+          </h2>
 
-        {products.length === 0 ? (
+          {/* SEARCH BAR */}
+          <div className="relative w-full sm:w-72">
+            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-base-content/40" />
+            <input
+              type="text"
+              placeholder="Search products..."
+              className="input input-bordered input-sm w-full pl-9 pr-8 bg-base-200"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 btn btn-ghost btn-xs btn-circle"
+              >
+                <XIcon className="size-3" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Search results count */}
+        {searchQuery && (
+          <p className="text-sm text-base-content/50 mb-4">
+            {filteredProducts.length} result{filteredProducts.length !== 1 ? "s" : ""} for "{searchQuery}"
+          </p>
+        )}
+
+        {filteredProducts.length === 0 ? (
           <div className="card bg-base-300">
             <div className="card-body items-center text-center py-16">
               <PackageIcon className="size-16 text-base-content/20" />
-              <h3 className="card-title text-base-content/50">No products yet</h3>
-              <p className="text-base-content/40 text-sm">Be the first to share something!</p>
-              <Link to="/create" className="btn btn-primary btn-sm mt-2">
-                Create Product
-              </Link>
+              <h3 className="card-title text-base-content/50">
+                {searchQuery ? "No products found" : "No products yet"}
+              </h3>
+              <p className="text-base-content/40 text-sm">
+                {searchQuery
+                  ? `Try a different search term`
+                  : "Be the first to share something!"}
+              </p>
+              {!searchQuery && (
+                <Link to="/create" className="btn btn-primary btn-sm mt-2">
+                  Create Product
+                </Link>
+              )}
             </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

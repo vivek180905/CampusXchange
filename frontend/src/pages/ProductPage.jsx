@@ -1,8 +1,8 @@
-import { ArrowLeftIcon, EditIcon, Trash2Icon, CalendarIcon, UserIcon } from "lucide-react";
+import { ArrowLeftIcon, EditIcon, Trash2Icon, CalendarIcon, UserIcon, IndianRupeeIcon, CheckCircleIcon, RotateCcwIcon } from "lucide-react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import CommentSection from "../components/CommentSection";
 import { useAuth } from "@clerk/clerk-react";
-import { useProduct, useDeleteProduct } from "../hooks/useProducts";
+import { useProduct, useDeleteProduct, useToggleSold } from "../hooks/useProducts";
 import { useParams, Link, useNavigate } from "react-router";
 
 function ProductPage() {
@@ -12,11 +12,16 @@ function ProductPage() {
 
   const { data: product, isLoading, error } = useProduct(id);
   const deleteProduct = useDeleteProduct();
+  const toggleSold = useToggleSold();
 
   const handleDelete = () => {
     if (confirm("Delete this product permanently?")) {
       deleteProduct.mutate(id, { onSuccess: () => navigate("/") });
     }
+  };
+
+  const handleToggleSold = () => {
+    toggleSold.mutate(id);
   };
 
   if (isLoading) return <LoadingSpinner />;
@@ -44,6 +49,21 @@ function ProductPage() {
         </Link>
         {isOwner && (
           <div className="flex gap-2">
+            {/* Toggle Sold Button */}
+            <button
+              onClick={handleToggleSold}
+              className={`btn btn-sm gap-1 ${product.isSold ? "btn-success" : "btn-warning"}`}
+              disabled={toggleSold.isPending}
+            >
+              {toggleSold.isPending ? (
+                <span className="loading loading-spinner loading-xs" />
+              ) : product.isSold ? (
+                <RotateCcwIcon className="size-4" />
+              ) : (
+                <CheckCircleIcon className="size-4" />
+              )}
+              {product.isSold ? "Mark Available" : "Mark as Sold"}
+            </button>
             <Link to={`/edit/${product.id}`} className="btn btn-ghost btn-sm gap-1">
               <EditIcon className="size-4" /> Edit
             </Link>
@@ -63,21 +83,44 @@ function ProductPage() {
         )}
       </div>
 
+      {/* SOLD Banner */}
+      {product.isSold && (
+        <div role="alert" className="alert alert-error">
+          <CheckCircleIcon className="size-5" />
+          <span className="font-semibold">This item has been sold</span>
+        </div>
+      )}
+
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Image */}
         <div className="card bg-base-300">
-          <figure className="p-4">
+          <figure className="p-4 relative">
             <img
               src={product.imageUrl}
               alt={product.title}
-              className="rounded-xl w-full h-80 object-cover"
+              className={`rounded-xl w-full h-80 object-cover ${product.isSold ? "grayscale opacity-70" : ""}`}
             />
+            {product.isSold && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="badge badge-error badge-lg font-bold text-white text-xl px-6 py-4">
+                  SOLD
+                </span>
+              </div>
+            )}
           </figure>
         </div>
 
         <div className="card bg-base-300">
           <div className="card-body">
             <h1 className="card-title text-2xl">{product.title}</h1>
+
+            {/* Price */}
+            {product.price != null && (
+              <div className="flex items-center gap-1 text-primary font-bold text-2xl my-1">
+                <IndianRupeeIcon className="size-5" />
+                {product.price.toLocaleString("en-IN")}
+              </div>
+            )}
 
             <div className="flex flex-wrap gap-4 text-sm text-base-content/60 my-2">
               <div className="flex items-center gap-1">

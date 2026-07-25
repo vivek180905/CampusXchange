@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, ImageIcon, TypeIcon, FileTextIcon, SaveIcon } from "lucide-react";
+import { ArrowLeftIcon, ImageIcon, TypeIcon, FileTextIcon, SaveIcon, IndianRupeeIcon } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 
@@ -7,6 +7,7 @@ function EditProductForm({ product, isPending, isError, onSubmit }) {
     title: product.title,
     description: product.description,
     imageUrl: product.imageUrl,
+    price: product.price != null ? String(product.price) : "",
   });
 
   return (
@@ -39,6 +40,20 @@ function EditProductForm({ product, isPending, isError, onSubmit }) {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required
+              />
+            </label>
+
+            {/* PRICE INPUT */}
+            <label className="input input-bordered flex items-center gap-2 bg-base-200">
+              <IndianRupeeIcon className="size-4 text-base-content/50" />
+              <input
+                type="number"
+                placeholder="Price (optional)"
+                aria-label="Price"
+                className="grow"
+                min="0"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
               />
             </label>
 

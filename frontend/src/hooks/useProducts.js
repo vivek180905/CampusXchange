@@ -6,6 +6,7 @@ import {
   getMyProducts,
   getProductById,
   updateProduct,
+  toggleSoldStatus,
 } from "../lib/api";
 
 export const useProducts = () => {
@@ -62,3 +63,16 @@ export const useUpdateProduct = () => {
     },
   });
 };
+
+export const useToggleSold = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: toggleSoldStatus,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["product", data.id] });
+      queryClient.invalidateQueries({ queryKey: ["myProducts"] });
+    },
+  });
+};
